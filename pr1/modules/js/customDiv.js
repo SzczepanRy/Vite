@@ -1,46 +1,92 @@
+let id = -1;
+
+let level = [];
 export default class CustomDiv {
+	constructor(w, h, sqrt, r = false) {
+		console.log(this);
+		this.sqrt = sqrt;
+		this.w = w;
+		this.h = h;
 
-    constructor(w, h, text, color) {
+		this.type = 'wall';
 
-        console.log(this)
+		id++;
+		if (r) {
+			id = -1;
+		}
+		//
+		this.createDiv();
+	}
 
-        this.w = w
-        this.h = h
+	createDiv() {
+		this.img = document.createElement('img');
+		this.img.setAttribute('src', './modules/gfx/heks.png');
+		this.img.style.width = `${this.w}px`;
+		this.img.style.height = `${this.h}px`;
+		this.img.style.position = `relative`;
 
-        //
-        this.createDiv()
+		this.div = document.createElement('div');
+		this.div.append(this.img);
 
-    }
+		this.div.id = id;
+		this.div.style.width = `${this.w}px`;
+		this.div.style.height = `${this.h}px`;
+		this.div.style.position = 'absolute';
+		let t = 0;
+		//
 
-    createDiv() {
+		this.div.onclick = (e) => {
+			let x = e.currentTarget.id % this.sqrt;
+			let y = Math.floor(e.currentTarget.id / this.sqrt);
 
+			console.log(this.type);
+			t++;
+			let obj = {
+				id: e.currentTarget.id,
+				x,
+				y,
+				dirOut: t % 6,
+				dirIn: (t + 3) % 6,
+				type: this.type,
+			};
+			this.img.setAttribute('src', './modules/gfx/' + (t % 6) + '.png');
+			this.img.style.transform = `rotate(${(t % 6) * 60}deg) `;
 
-        this.img = document.createElement("img")
-        this.img.setAttribute("src", "./modules/gfx/heks.png")
-        this.img.style.width = `${this.w}px`
-        this.img.style.height = `${this.h}px`
+			if (level.filter((el) => el.id == e.currentTarget.id).length > 0) {
+				level = level.map((el) => {
+					if (el.id == e.currentTarget.id) {
+						return {
+							id: e.currentTarget.id,
+							x,
+							y,
+							dirOut: t % 6,
+							dirIn: (t + 3) % 6,
+							type: this.type,
+						};
+					} else {
+						return el;
+					}
+				});
+			} else {
+				level.push(obj);
+			}
 
-        this.div = document.createElement("div")
-        this.div.append(this.img)
+			let textV = { size: level.length, level: [...level] };
+			let textarea = document.querySelector('.jsonData');
+			textarea.value = JSON.stringify(textV, null, 2);
+		};
+	}
 
+	changeType(type) {
+		this.type = type;
+	}
 
-        this.div.style.width = `${this.w}px`
-        this.div.style.height = `${this.h}px`
-        this.div.style.position = "relative"
+	getRoot() {
+		return this.div;
+	}
 
-        //
-        this.div.onclick = function () {
-            alert(`color=}`)
-        }
-    }
-
-    getRoot() {
-        return this.div
-    }
-
-    setXY(x, y) {
-        this.div.style.left = `${x}px`
-        this.div.style.top = `${y}px`
-    }
-
+	setXY(x, y) {
+		this.div.style.left = `${x + 300}px`;
+		this.div.style.top = `${y + 10}px`;
+	}
 }
