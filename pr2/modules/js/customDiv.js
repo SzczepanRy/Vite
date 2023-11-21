@@ -22,7 +22,7 @@ export default class CustomDiv {
 
 	createDiv() {
 		this.img = document.createElement('img');
-		this.img.setAttribute('src', './modules/gfx/heks.png');
+		this.img.setAttribute('src', 'gfx/heks.png');
 		this.img.style.width = `${this.w}px`;
 		this.img.style.height = `${this.h}px`;
 		this.img.style.position = `relative`;
@@ -52,7 +52,7 @@ export default class CustomDiv {
 				type: this.type,
 			};
 
-			this.img.setAttribute('src', './modules/gfx/' + (t % 6) + '.png');
+			this.img.setAttribute('src', 'gfx/' + (t % 6) + '.png');
 			this.img.style.transform = `rotate(${(t % 6) * 60}deg) `;
 
 			if (level.filter((el) => el.id == e.currentTarget.id).length > 0) {
@@ -147,10 +147,7 @@ export default class CustomDiv {
 
 			Array.from(board.children).forEach((div) => {
 				if (div.id == id) {
-					div.firstChild.setAttribute(
-						'src',
-						'./modules/gfx/' + el.dirOut + '.png'
-					);
+					div.firstChild.setAttribute('src', 'gfx/' + el.dirOut + '.png');
 					div.firstChild.style.transform = `rotate(${el.dirOut * 60}deg) `;
 				}
 			});

@@ -5,10 +5,10 @@ const app = express();
 let textarea = {};
 app.use(cors());
 app.use(express.json());
-app.use(express.static('modules'));
+app.use(express.static('dist'));
 
 app.get('/', (req, res) => {
-	res.json(textarea);
+	res.sendFile('index.html');
 });
 
 app.get('/get', (req, res) => {
