@@ -1,12 +1,16 @@
 let id = -1;
 
 let level = [];
+let data = ""
+const board = document.query
 export default class CustomDiv {
 	constructor(w, h, sqrt, r = false) {
 		console.log(this);
 		this.sqrt = sqrt;
 		this.w = w;
 		this.h = h;
+
+
 
 		this.type = 'wall';
 
@@ -85,8 +89,9 @@ export default class CustomDiv {
 				level.push(obj);
 			}
 
-			let textV = { size: level.length, level: [...level] };
+			let textV = { size: this.sqrt, level: [...level] };
 			let textarea = document.querySelector('.jsonData');
+			data = textV
 			textarea.value = JSON.stringify(textV, null, 2);
 		};
 	}
@@ -97,6 +102,39 @@ export default class CustomDiv {
 
 	getRoot() {
 		return this.div;
+	}
+	async getJson() {
+		let res = await fetch("http://localhost:3000/get", {
+			method: "GET"
+			, headers: {
+				"Content-Type": 'application/json'
+			}
+		})
+		this.textarea = await res.json()
+		this.level = this.textarea.level
+
+		this.level.map((el) => {
+			console.log(el);
+			id = el.y * this.textarea.size + el.x
+			console.log(id);
+			
+			im.setAttribute('src', './modules/gfx/' + el.dirOut + '.png');
+			im.style.transform = `rotate(${el.dirOut * 60}deg) `;
+		})
+
+	}
+
+	async sendJson() {
+
+		let res = await fetch("http://localhost:3000/send", {
+			method: "POST"
+			, headers: {
+				"Content-Type": 'application/json'
+			},
+			body: JSON.stringify({ data })
+		})
+		return await res.json()
+
 	}
 
 	setXY(x, y) {
