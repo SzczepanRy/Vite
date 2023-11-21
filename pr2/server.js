@@ -1,21 +1,25 @@
-const express = require("express")
-const cors = require("cors")
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const app = express();
 
+let textarea = {};
+app.use(cors());
+app.use(express.json());
+app.use(express.static('modules'));
 
-let textarea = {}
-app.use(cors())
-app.use(express.json())
+app.get('/', (req, res) => {
+	res.json(textarea);
+});
 
-app.get("/get", (req, res) => {
-    res.json(textarea)
-})
-app.post("/send", (req, res) => {
-    let { data } = req.body
-    textarea = data
-    res.send(true)
-})
+app.get('/get', (req, res) => {
+	res.json(textarea);
+});
+app.post('/send', (req, res) => {
+	let { data } = req.body;
+	textarea = data;
+	res.send(true);
+});
 
 app.listen(3000, () => {
-    console.log("runnin");
-})
+	console.log('runnin');
+});

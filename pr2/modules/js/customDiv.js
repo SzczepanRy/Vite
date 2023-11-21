@@ -1,16 +1,14 @@
 let id = -1;
 
 let level = [];
-let data = ""
-const board = document.query
+let data = '';
+
 export default class CustomDiv {
 	constructor(w, h, sqrt, r = false) {
 		console.log(this);
 		this.sqrt = sqrt;
 		this.w = w;
 		this.h = h;
-
-
 
 		this.type = 'wall';
 
@@ -59,14 +57,13 @@ export default class CustomDiv {
 
 			if (level.filter((el) => el.id == e.currentTarget.id).length > 0) {
 				level = level.map((el, i) => {
-
 					if (level.length == 1) {
 						return {
 							id: e.currentTarget.id,
 							x,
 							y,
 							dirOut: t % 6,
-							dirIn: "pierwsze",
+							dirIn: 'pierwsze',
 							type: this.type,
 						};
 					}
@@ -91,7 +88,7 @@ export default class CustomDiv {
 
 			let textV = { size: this.sqrt, level: [...level] };
 			let textarea = document.querySelector('.jsonData');
-			data = textV
+			data = textV;
 			textarea.value = JSON.stringify(textV, null, 2);
 		};
 	}
@@ -103,38 +100,74 @@ export default class CustomDiv {
 	getRoot() {
 		return this.div;
 	}
-	async getJson() {
-		let res = await fetch("http://localhost:3000/get", {
-			method: "GET"
-			, headers: {
-				"Content-Type": 'application/json'
+	async getSize() {
+		let res = await fetch('http://localhost:3000/get', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		this.textarea = await res.json();
+		return +this.textarea.size;
+	}
+	async getJson(board, textarea) {
+		let res = await fetch('http://localhost:3000/get', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		this.textarea = await res.json();
+		this.level = this.textarea.level;
+
+		console.log(this.textarea.size);
+
+		data = JSON.stringify(this.textarea);
+
+		console.log(board);
+
+		id = -1;
+		board.innerHTML = '';
+
+		for (let i = 0; i < this.textarea.size; i++) {
+			for (let z = 0; z < this.textarea.size; z++) {
+				const customDiv = new CustomDiv(100, 100, this.textarea.size);
+
+				customDiv.setXY(z * 80, i * 90 + (z % 2) * 45);
+
+				console.log(customDiv);
+				board.append(customDiv.getRoot());
 			}
-		})
-		this.textarea = await res.json()
-		this.level = this.textarea.level
+		}
 
 		this.level.map((el) => {
 			console.log(el);
-			id = el.y * this.textarea.size + el.x
+			id = el.y * this.textarea.size + el.x;
 			console.log(id);
-			
-			im.setAttribute('src', './modules/gfx/' + el.dirOut + '.png');
-			im.style.transform = `rotate(${el.dirOut * 60}deg) `;
-		})
 
+			Array.from(board.children).forEach((div) => {
+				if (div.id == id) {
+					div.firstChild.setAttribute(
+						'src',
+						'./modules/gfx/' + el.dirOut + '.png'
+					);
+					div.firstChild.style.transform = `rotate(${el.dirOut * 60}deg) `;
+				}
+			});
+		});
+
+		textarea.value = JSON.stringify(this.textarea, null, 2);
 	}
 
 	async sendJson() {
-
-		let res = await fetch("http://localhost:3000/send", {
-			method: "POST"
-			, headers: {
-				"Content-Type": 'application/json'
+		let res = await fetch('http://localhost:3000/send', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ data })
-		})
-		return await res.json()
-
+			body: JSON.stringify({ data }),
+		});
+		return await res.json();
 	}
 
 	setXY(x, y) {
