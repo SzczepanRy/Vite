@@ -9,6 +9,18 @@ export default class HexGeometry {
     this.mesh = new Mesh(this.geo, this.material);
     for (let i = 0; i < 6; i++) {
       let side = this.mesh.clone();
+      if (i == 3 || i == 0) {
+        let wallObj = new Object3D();
+        let shWallGeo = new BoxGeometry(2 / Math.sqrt(3), 2, 0.4);
+
+        let shWallMesh1 = new Mesh(shWallGeo, this.material);
+        let shWallMesh2 = new Mesh(shWallGeo, this.material);
+        wallObj.add(shWallMesh1);
+        shWallMesh1.position.set(2 / Math.sqrt(3), 0, 0);
+        wallObj.add(shWallMesh2);
+        shWallMesh2.position.set(-(2 / Math.sqrt(3)), 0, 0);
+        side = wallObj;
+      }
       let angle_deg = 60 * i;
       let angle_rad = (Math.PI / 180) * angle_deg;
 
