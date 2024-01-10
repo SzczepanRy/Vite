@@ -1,7 +1,4 @@
 import { GameObject } from "./src/modules/Main";
-import { allEvents } from "./src/modules/UI"
+import { allEvents } from "./src/modules/UI";
 
-
-GameObject.render();
-
-allEvents.init()
+allEvents.init();
