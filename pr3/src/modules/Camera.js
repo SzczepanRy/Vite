@@ -12,7 +12,7 @@ export default class Camera {
             this.threeCamera.position.set(10, 10, 90 * (Math.PI / 180));
             // this.threeCamera.rotation.y = Math.PI * 0.5;
         } else {
-            this.threeCamera.position.set(-10, 10, -270 * (Math.PI / 180));
+            this.threeCamera.position.set(-10, 10, -90 * (Math.PI / 180));
         }
 
         this.threeCamera.lookAt(new Vector3(0, 0, 0));
