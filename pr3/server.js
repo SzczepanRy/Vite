@@ -16,8 +16,8 @@ let board = [
 ];
 
 let pawns = [
-    [1, 0, 1, 0, 1, 0, 1, 0],
     [0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -55,6 +55,10 @@ app.get("/resetUsers", (req, res) => {
     users = [];
     res.json({ succes: true, message: "session reset" });
 });
+app.get("/wait", (req, res) => {
+    res.json({ users: users.length })
+})
+
 
 app.listen(3000, () => {
     console.log("runnin");
