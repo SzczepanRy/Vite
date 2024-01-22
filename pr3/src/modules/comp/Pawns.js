@@ -1,10 +1,8 @@
 import { CylinderGeometry, DoubleSide, Mesh, MeshBasicMaterial, Object3D, TextureLoader } from "three";
 
-<<<<<<< HEAD
-=======
-import whiteWood from "../../gfx/white.png"
+import whiteWood from "../../gfx/white.png";
 
-import blackWood from "../../gfx/black.png"
+import blackWood from "../../gfx/black.png";
 // let pawns = [
 //     [1, 0, 1, 0, 1, 0, 1, 0],
 //     [0, 1, 0, 1, 0, 1, 0, 1],
@@ -16,7 +14,6 @@ import blackWood from "../../gfx/black.png"
 //     [2, 0, 2, 0, 2, 0, 2, 0],
 // ];
 
->>>>>>> 8e45566804396983b08ef7fdfec8cb6e4ef4010a
 export default class PawnsObject {
     constructor(pawnsData) {
         this.pawnsData = pawnsData;
