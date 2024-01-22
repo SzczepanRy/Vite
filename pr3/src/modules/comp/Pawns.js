@@ -1,16 +1,5 @@
 import { CylinderGeometry, Mesh, MeshBasicMaterial, Object3D } from "three";
 
-// let pawns = [
-//     [1, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 0, 1, 0, 1, 0, 1],
-//     [0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 2, 0, 2, 0, 2, 0, 2],
-//     [2, 0, 2, 0, 2, 0, 2, 0],
-// ];
-
 export default class PawnsObject {
     constructor(pawnsData) {
         this.pawnsData = pawnsData;
