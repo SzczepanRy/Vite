@@ -1,4 +1,4 @@
-import { CylinderGeometry, DoubleSide, Mesh, MeshBasicMaterial, Object3D, TextureLoader } from "three";
+import { CylinderGeometry, DoubleSide, Mesh, MeshBasicMaterial, Object3D, SRGBColorSpace, TextureLoader } from "three";
 
 import whiteWood from "../../gfx/white.png";
 
@@ -24,29 +24,24 @@ export default class PawnsObject {
         this.pawnsData.forEach((row, i) => {
             row.forEach((el, j) => {
                 if (el == 2) {
-                    // this.material = new MeshBasicMaterial({
-                    //     map: new TextureLoader().load(whiteWood),
-                    //     side: DoubleSide,
-                    //     // transparent: false,
-                    //     color: "#ffff00"
-                    //     // opacity: 1
-                    //     // wireframe: true
-                    // });
-                    this.material = new MeshBasicMaterial({ color: 0xfffff0 });
+                    let texture = new TextureLoader().load(whiteWood);
+                    texture.colorSpace = SRGBColorSpace;
+                    this.material = new MeshBasicMaterial({
+                        map: texture,
+                        side: DoubleSide,
+                        transparent: false,
+                    });
                     let mesh = new Mesh(this.geo, this.material);
                     this.pawnsObject.add(mesh);
                     mesh.position.set(i * 2 - this.pawnsData.length + 1, 0.5, j * 2 - this.pawnsData.length + 1);
                 } else if (el == 1) {
-                    // this.material = new MeshBasicMaterial({
-                    //     map: new TextureLoader().load(blackWood),
-                    //     side: DoubleSide,
-                    //     transparent: false,
-                    //     color: "#000000"
-                    //     // color: { "000000"}
-                    //     // opacity: 1
-                    //     // wireframe: true
-                    // });
-                    this.material = new MeshBasicMaterial({ color: 0x000000 });
+                    let texture = new TextureLoader().load(blackWood);
+                    texture.colorSpace = SRGBColorSpace;
+                    this.material = new MeshBasicMaterial({
+                        map: texture,
+                        side: DoubleSide,
+                        transparent: false,
+                    });
                     let mesh = new Mesh(this.geo, this.material);
                     this.pawnsObject.add(mesh);
                     mesh.position.set(i * 2 - this.pawnsData.length + 1, 0.5, j * 2 - this.pawnsData.length + 1);

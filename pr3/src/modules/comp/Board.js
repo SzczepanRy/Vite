@@ -1,15 +1,16 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, MeshNormalMaterial, Object3D } from "three";
+import {
+    BoxGeometry,
+    DoubleSide,
+    Mesh,
+    MeshBasicMaterial,
+    MeshNormalMaterial,
+    Object3D,
+    SRGBColorSpace,
+    TextureLoader,
+} from "three";
 
-// let board = [
-//     [1, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 0, 1, 0, 1, 0, 1],
-//     [1, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 0, 1, 0, 1, 0, 1],
-//     [1, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 0, 1, 0, 1, 0, 1],
-//     [1, 0, 1, 0, 1, 0, 1, 0],
-//     [0, 1, 0, 1, 0, 1, 0, 1],
-// ];
+import whiteMarble from "../../gfx/whiteMarble.jpg";
+import blackMarble from "../../gfx/blackMarble.jpg";
 
 export default class BoardObject {
     constructor(boardData) {
@@ -22,9 +23,21 @@ export default class BoardObject {
         this.boardData.forEach((row, i) => {
             row.forEach((el, j) => {
                 if (el == 1) {
-                    this.material = new MeshBasicMaterial({ color: 0xfffff0 });
+                    let texture = new TextureLoader().load(whiteMarble);
+                    texture.colorSpace = SRGBColorSpace;
+                    this.material = new MeshBasicMaterial({
+                        map: texture,
+                        side: DoubleSide,
+                        transparent: false,
+                    });
                 } else {
-                    this.material = new MeshBasicMaterial({ color: 0x000000 });
+                    let texture = new TextureLoader().load(blackMarble);
+                    texture.colorSpace = SRGBColorSpace;
+                    this.material = new MeshBasicMaterial({
+                        map: texture,
+                        side: DoubleSide,
+                        transparent: false,
+                    });
                 }
                 let mesh = new Mesh(this.geo, this.material);
                 this.boardObject.add(mesh);
