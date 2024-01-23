@@ -18,6 +18,7 @@ export default class Renderer {
         this.click = 0;
         this.clickedItem;
         this.lastClickedItem;
+        this.lastClickedPawnMaterial;
 
         this.event = 0;
     }
@@ -45,7 +46,25 @@ export default class Renderer {
             this.render(scene, camera);
         });
     }
+    checkTile({ x, y, z }) {
+        console.log(x, y, z);
+        let Z = [-5, -1, 3, 7];
+        let X = [-7, -3, 1, 5];
 
+        if (Z.includes(z)) {
+            if (X.includes(x)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (Z.includes(x)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     render(scene, camera) {
         setTimeout(() => {
             console.log("render");
@@ -56,28 +75,40 @@ export default class Renderer {
                 console.log("hilight pawn");
                 console.log(this.clickedItem);
                 this.lastClickedItem = this.clickedItem;
-                // this.clickedItem.material = new MeshBasicMaterial({
-                //     color: 0x8888ff,
-                // });
+                this.lastClickedPawnMaterial = this.clickedItem.material;
+
+                this.clickedItem.material = new MeshBasicMaterial({
+                    color: 0x8888ff,
+                });
+
                 this.clickedItem.needsUpdate = true;
-                //check the
-            } else if (this.click == 2 && this.clickedItem.geometry.type == "BoxGeometry") {
+            } else if (
+                this.click == 2 &&
+                this.clickedItem.geometry.type == "BoxGeometry" &&
+                this.checkTile(this.clickedItem.position)
+            ) {
                 console.log("hilight tile");
+
                 console.log(this.clickedItem);
-                // this.clickedItem.material = new MeshBasicMaterial({
-                //     color: 0x5555ff,
-                // });
 
                 this.lastClickedItem.position.x = this.clickedItem.position.x;
                 this.lastClickedItem.position.z = this.clickedItem.position.z;
+                this.lastClickedItem.material = this.lastClickedPawnMaterial;
                 this.clickedItem.needsUpdate = true;
 
                 this.click = 0;
+            } else if (this.click > 2) {
+                this.lastClickedItem.material = this.lastClickedPawnMaterial;
+
+                this.click = 0;
             } else {
+                if (this.lastClickedItem) {
+                    this.lastClickedItem.material = this.lastClickedPawnMaterial;
+                }
                 this.click = 0;
             }
 
             this.threeRenderer.render(scene, camera);
-        }, 500);
+        }, 100);
     }
 }
