@@ -89,14 +89,13 @@ export default class Renderer {
                 this.checkTile(this.clickedItem.position)
             ) {
                 console.log("hilight tile");
-
-                this.lastClickedItem.position.x = this.clickedItem.position.x;
-                this.lastClickedItem.position.z = this.clickedItem.position.z;
                 console.log("net");
                 Net.reRenderBoard(
                     { CX: this.lastClickedItem.position.x, CY: this.lastClickedItem.position.z },
                     { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z }
                 );
+                this.lastClickedItem.position.x = this.clickedItem.position.x;
+                this.lastClickedItem.position.z = this.clickedItem.position.z;
 
                 this.lastClickedItem.material = this.lastClickedPawnMaterial;
                 this.clickedItem.needsUpdate = true;

@@ -42,29 +42,40 @@ socketio.on("connection", (client) => {
         // users.push(client.id);
         let { current, updated, player } = data;
         console.log({ current, updated, player });
-        // pawns = pawns.map((arr, i) => {
-        //     console.log(i, current.y);
-        //     if (i == current.y - 0.5) {
-        //         arr.map((el, j) => {
-        //             if (j == current.x + 7) {
-        //                 return 0;
-        //             }
-        //         });
-        //     }
-        //     if (i == current.y - 0.5) {
-        //         arr.map((el, j) => {
-        //             if (j == (updated.x + 7) / 2) {
-        //                 return +player;
-        //             }
-        //         });
-        //     }
-        // });
+        pawns = pawns.map((arr, i) => {
+            console.log(i, (current.y + 7) / 2);
+            console.log(i, (updated.y + 7) / 2);
+            if (i == (current.x + 7) / 2) {
+                let array = arr.map((el, j) => {
+                    if (j == (current.y + 7) / 2) {
+                        console.log("fpound1");
+
+                        return 0;
+                    } else {
+                        return el;
+                    }
+                });
+                return array;
+            } else if (i == (updated.x + 7) / 2) {
+                let array = arr.map((el, j) => {
+                    if (j == (updated.y + 7) / 2) {
+                        console.log("fpound2");
+                        return 1;
+                    } else {
+                        return el;
+                    }
+                });
+                return array;
+            } else {
+                return arr;
+            }
+        });
 
         console.log(pawns);
 
         console.log(data);
 
-        client.emit("response", { board, pawns, player });
+        client.broadcast.emit("response", { board, pawns, player });
 
         // client.id - unikalna nazwa klienta generowana przez socket.io
     });
