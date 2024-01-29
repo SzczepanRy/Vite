@@ -8,6 +8,12 @@ const scene = new Scene();
 const renderer = new Renderer(scene, container);
 
 const GameObject = {
+    reset() {
+        for (let i = scene.children.length - 1; i >= 0; i--) {
+            let obj = scene.children[i];
+            scene.remove(obj);
+        }
+    },
     render(pawns, board, player) {
         // console.log("render");
         console.log(player + "a");

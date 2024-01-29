@@ -1,7 +1,14 @@
 import { GameObject } from "./Main";
-
+import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
 const nav = document.querySelector("nav");
 const dialog = document.querySelector(".loginDialog");
+const client = io("ws://localhost:3000");
+window.addEventListener("load", () => {
+    client.on("onconnect", (data) => {
+        console.log(data.clientId);
+    });
+});
+
 export const Net = {
     async loginUser(userName) {
         try {
@@ -48,5 +55,18 @@ export const Net = {
         } catch (err) {
             throw err;
         }
+    },
+    reRenderBoard({ CX, CY }, { UX, UY }) {
+        console.log({ CX, CY }, { UX, UY });
+        client.emit("refresh", {
+            current: { x: CX, y: CY },
+            updated: { x: UX, y: UY },
+            player: 2,
+        });
+        client.on("response", (data) => {
+            console.log(data);
+            GameObject.reset();
+            GameObject.render(data.pawns, data.board, data.player);
+        });
     },
 };

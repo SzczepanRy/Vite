@@ -1,5 +1,5 @@
 import { MeshBasicMaterial, Raycaster, Vector2, WebGLRenderer } from "three";
-
+import { Net } from "./Net";
 export default class Renderer {
     constructor(scene, container) {
         this.scene = scene;
@@ -65,6 +65,7 @@ export default class Renderer {
             }
         }
     }
+
     render(scene, camera) {
         setTimeout(() => {
             console.log("render");
@@ -89,10 +90,14 @@ export default class Renderer {
             ) {
                 console.log("hilight tile");
 
-                console.log(this.clickedItem);
-
                 this.lastClickedItem.position.x = this.clickedItem.position.x;
                 this.lastClickedItem.position.z = this.clickedItem.position.z;
+                console.log("net");
+                Net.reRenderBoard(
+                    { CX: this.lastClickedItem.position.x, CY: this.lastClickedItem.position.z },
+                    { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z }
+                );
+
                 this.lastClickedItem.material = this.lastClickedPawnMaterial;
                 this.clickedItem.needsUpdate = true;
 
