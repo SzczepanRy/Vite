@@ -1,5 +1,8 @@
-import { MeshBasicMaterial, Raycaster, Vector2, WebGLRenderer } from "three";
+import { MeshBasicMaterial, DoubleSide, SRGBColorSpace, TextureLoader, Raycaster, Vector2, WebGLRenderer } from "three";
 import { Net } from "./Net";
+import whiteWood from "../gfx/white.png";
+
+import blackWood from "../gfx/black.png";
 export default class Renderer {
     constructor(scene, container) {
         this.scene = scene;
@@ -27,7 +30,7 @@ export default class Renderer {
         this.threeRenderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    addListiner(scene, camera) {
+    addListiner(scene, camera, player) {
         this.event++;
         window.addEventListener("mousedown", (e) => {
             this.mouseVector.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -43,7 +46,7 @@ export default class Renderer {
                 this.event++;
                 this.click++;
             }
-            this.render(scene, camera);
+            this.render(scene, camera, player);
         });
     }
     checkTile({ x, y, z }) {
@@ -66,11 +69,36 @@ export default class Renderer {
         }
     }
 
-    render(scene, camera) {
+    // checkMatrerial(player) {
+    //     if (player == 2) {
+    //         let texture = new TextureLoader().load(whiteWood);
+    //         texture.colorSpace = SRGBColorSpace;
+    //         this.material = new MeshBasicMaterial({
+    //             map: texture,
+    //             side: DoubleSide,
+    //             transparent: false,
+    //         });
+    //         return this.material;
+    //     } else if (player == 1) {
+    //         let texture = new TextureLoader().load(blackWood);
+    //         texture.colorSpace = SRGBColorSpace;
+    //         this.material = new MeshBasicMaterial({
+    //             map: texture,
+    //             side: DoubleSide,
+    //             transparent: false,
+    //         });
+
+    //         return this.material;
+    //     }
+    // }
+
+    render(scene, camera, player) {
         setTimeout(() => {
             console.log("render");
+            console.log(player);
+
             if (this.event == 0) {
-                this.addListiner(scene, camera);
+                this.addListiner(scene, camera, player);
             }
             if (this.click == 1 && this.clickedItem.geometry.type == "CylinderGeometry") {
                 console.log("hilight pawn");
@@ -89,25 +117,28 @@ export default class Renderer {
                 this.checkTile(this.clickedItem.position)
             ) {
                 console.log("hilight tile");
-                console.log("net");
+                console.log(player);
+                // this.lastClickedItem.material = this.checkMatrerial(player);
                 Net.reRenderBoard(
                     { CX: this.lastClickedItem.position.x, CY: this.lastClickedItem.position.z },
-                    { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z }
+                    { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z },
+                    player
                 );
-                this.lastClickedItem.position.x = this.clickedItem.position.x;
-                this.lastClickedItem.position.z = this.clickedItem.position.z;
+                // this.lastClickedItem.position.x = this.clickedItem.position.x;
+                // this.lastClickedItem.position.z = this.clickedItem.position.z;
 
-                this.lastClickedItem.material = this.lastClickedPawnMaterial;
-                this.clickedItem.needsUpdate = true;
+                //    this.clickedItem.needsUpdate = true;
 
                 this.click = 0;
             } else if (this.click > 2) {
-                this.lastClickedItem.material = this.lastClickedPawnMaterial;
+                // this.lastClickedItem.material = this.checkMatrerial(player);
+                // this.lastClickedItem.material = this.lastClickedPawnMaterial;
 
                 this.click = 0;
             } else {
                 if (this.lastClickedItem) {
-                    this.lastClickedItem.material = this.lastClickedPawnMaterial;
+                    // this.lastClickedItem.material = this.checkMatrerial(player);
+                    // this.lastClickedItem.material = this.lastClickedPawnMaterial;
                 }
                 this.click = 0;
             }

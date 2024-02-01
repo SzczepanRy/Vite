@@ -1,3 +1,4 @@
+import Ico from "./Ico";
 import { GameObject } from "./Main";
 import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
 const nav = document.querySelector("nav");
@@ -27,6 +28,7 @@ export const Net = {
                 dialog.close(); //doesnt workkkk
                 dialog.style.zIndex = -10;
                 //if (data.player == 1) {
+                console.log("Playerr " + data.player);
                 GameObject.render(data.pawns, data.board, data.player);
                 // }
 
@@ -56,16 +58,18 @@ export const Net = {
             throw err;
         }
     },
-    reRenderBoard({ CX, CY }, { UX, UY }) {
+    reRenderBoard({ CX, CY }, { UX, UY }, player) {
         console.log({ CX, CY }, { UX, UY });
+        console.log(player);
         client.emit("refresh", {
             current: { x: CX, y: CY },
             updated: { x: UX, y: UY },
-            player: 2,
+            player,
         });
         client.on("response", (data) => {
-            console.log(data);
+            console.log(data.player + "responce");
             GameObject.reset();
+
             GameObject.render(data.pawns, data.board, data.player);
         });
     },

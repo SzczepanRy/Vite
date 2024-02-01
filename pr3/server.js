@@ -35,21 +35,21 @@ app.use(express.json());
 app.use(express.static("dist"));
 
 socketio.on("connection", (client) => {
-    // users.push(client.id);
-    console.log(client.id);
+    sessions.push(client.id);
+    if (sessions.length > 2) {
+        sessions.shift();
+    }
+    console.log(sessions);
+    let setobj;
     // client.id - unikalna nazwa klienta generowana przez socket.io
     client.on("refresh", (data) => {
         // users.push(client.id);
         let { current, updated, player } = data;
         console.log({ current, updated, player });
         pawns = pawns.map((arr, i) => {
-            console.log(i, (current.y + 7) / 2);
-            console.log(i, (updated.y + 7) / 2);
             if (i == (current.x + 7) / 2) {
                 let array = arr.map((el, j) => {
                     if (j == (current.y + 7) / 2) {
-                        console.log("fpound1");
-
                         return 0;
                     } else {
                         return el;
@@ -59,8 +59,7 @@ socketio.on("connection", (client) => {
             } else if (i == (updated.x + 7) / 2) {
                 let array = arr.map((el, j) => {
                     if (j == (updated.y + 7) / 2) {
-                        console.log("fpound2");
-                        return 1;
+                        return +player == 2 ? 1 : 2;
                     } else {
                         return el;
                     }
@@ -71,14 +70,14 @@ socketio.on("connection", (client) => {
             }
         });
 
-        console.log(pawns);
-
-        console.log(data);
-
-        client.broadcast.emit("response", { board, pawns, player });
+        setobj = { board, pawns, player };
+        socketio.emit("response", { board, pawns, player });
 
         // client.id - unikalna nazwa klienta generowana przez socket.io
     });
+    if (setobj) {
+        socketio.emit("load", setobj);
+    }
 });
 
 app.get("/", (req, res) => {

@@ -17,12 +17,12 @@ const GameObject = {
     render(pawns, board, player) {
         // console.log("render");
         console.log(player + "a");
-
         if (pawns != undefined && board != undefined && player != undefined) {
             const ico = new Ico(scene, pawns, board);
 
             const camera = new Camera(renderer.threeRenderer, player);
-            renderer.render(scene, camera.threeCamera);
+
+            renderer.render(scene, camera.threeCamera, player);
             ico.update(); //
 
             requestAnimationFrame(GameObject.render);
