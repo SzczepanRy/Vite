@@ -1,6 +1,8 @@
+import { Camera, Scene } from "three";
 import Ico from "./Ico";
 import { GameObject } from "./Main";
 import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
+import Renderer from "./Renderer";
 const nav = document.querySelector("nav");
 const dialog = document.querySelector(".loginDialog");
 const client = io("ws://localhost:3000");
@@ -61,6 +63,7 @@ export const Net = {
     reRenderBoard({ CX, CY }, { UX, UY }, player) {
         console.log({ CX, CY }, { UX, UY });
         console.log(player);
+
         client.emit("refresh", {
             current: { x: CX, y: CY },
             updated: { x: UX, y: UY },
@@ -71,6 +74,22 @@ export const Net = {
             GameObject.reset();
 
             GameObject.render(data.pawns, data.board, data.player);
+        });
+        client.on("block", (data) => {
+            console.log(data.player + "responce");
+            GameObject.reset();
+            GameObject.render(data.pawns, data.board, data.player);
+            document.querySelector(".waiting").showModal();
+            console.log("YOU SHOULD BE BLOCKED");
+            setTimeout(() => {
+                console.log("LOST");
+            }, 10000);
+        });
+        client.on("unblock", (data) => {
+            console.log(data.player + "responce");
+            GameObject.reset();
+            GameObject.render(data.pawns, data.board, data.player);
+            document.querySelector(".waiting").close();
         });
     },
 };

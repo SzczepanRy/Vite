@@ -45,6 +45,7 @@ socketio.on("connection", (client) => {
     client.on("refresh", (data) => {
         // users.push(client.id);
         let { current, updated, player } = data;
+
         console.log({ current, updated, player });
         pawns = pawns.map((arr, i) => {
             if (i == (current.x + 7) / 2) {
@@ -71,7 +72,9 @@ socketio.on("connection", (client) => {
         });
 
         setobj = { board, pawns, player };
-        socketio.emit("response", { board, pawns, player });
+        client.emit("response", { board, pawns, player });
+        client.emit("block", { board, pawns, player });
+        client.broadcast.emit("unblock", { board, pawns, player: +player == 2 ? 1 : 2 });
 
         // client.id - unikalna nazwa klienta generowana przez socket.io
     });
