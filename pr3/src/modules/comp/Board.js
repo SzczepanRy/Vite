@@ -11,6 +11,7 @@ import {
 
 import whiteMarble from "../../gfx/whiteMarble.jpg";
 import blackMarble from "../../gfx/blackMarble.jpg";
+import greenMarble from "../../gfx/greenMarble.jpg";
 
 export default class BoardObject {
     constructor(boardData) {
@@ -29,6 +30,15 @@ export default class BoardObject {
                         map: texture,
                         side: DoubleSide,
                         transparent: false,
+                    });
+                } else if (el == 3) {
+                    let texture = new TextureLoader().load(greenMarble);
+                    texture.colorSpace = SRGBColorSpace;
+                    this.material = new MeshBasicMaterial({
+                        map: texture,
+                        side: DoubleSide,
+                        transparent: false,
+                        name: "highlight",
                     });
                 } else {
                     let texture = new TextureLoader().load(blackMarble);

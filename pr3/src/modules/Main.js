@@ -14,7 +14,7 @@ const GameObject = {
             scene.remove(obj);
         }
     },
-    render(pawns, board, player) {
+    render(pawns, board, player, highlight = true, current) {
         // console.log("render");
         console.log(player + "a");
         if (pawns != undefined && board != undefined && player != undefined) {
@@ -22,7 +22,7 @@ const GameObject = {
 
             const camera = new Camera(renderer.threeRenderer, player);
 
-            renderer.render(scene, camera.threeCamera, player);
+            renderer.render(scene, camera.threeCamera, player, highlight, current);
             ico.update(); //
 
             requestAnimationFrame(GameObject.render);

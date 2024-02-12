@@ -34,6 +34,134 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 
+function kill({ current, updated, player }) {
+    let cx = (current.y + 7) / 2;
+    let cy = (current.x + 7) / 2;
+    let ux = (updated.y + 7) / 2;
+    let uy = (updated.x + 7) / 2;
+    if (player == 1) {
+        console.log("WHITE");
+
+        if (cx < ux) {
+            //|| cy > uy
+            console.log(cy, cx, uy, ux);
+            console.log(pawns[cy + 1][cx + 1]);
+            if (pawns[cy - 1][cx + 1] != 0 && pawns[cy - 1][cx + 1] !== (player == 2 ? 1 : 2)) {
+                pawns[cy - 1][cx + 1] = 0;
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            } else {
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            }
+
+            return pawns;
+        } else if (cx > ux) {
+            //|| cy > uy
+            if (pawns[cy - 1][cx - 1] != 0 && pawns[cy - 1][cx - 1] !== (player == 2 ? 1 : 2)) {
+                pawns[cy - 1][cx - 1] = 0;
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            } else {
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            }
+
+            return pawns;
+        } else {
+            console.log("else");
+            pawns[cy][cx] = 0;
+            pawns[uy][ux] = player == 2 ? 1 : 2;
+            return pawns;
+        }
+    } else {
+        console.log("BLACK");
+        if (cx < ux) {
+            //|| cy > uy
+            console.log(cy, cx, uy, ux);
+            console.log(pawns[cy + 1][cx + 1]);
+            if (pawns[cy + 1][cx + 1] != 0 && pawns[cy + 1][cx + 1] !== (player == 2 ? 1 : 2)) {
+                pawns[cy + 1][cx + 1] = 0;
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            } else {
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            }
+
+            return pawns;
+        } else if (cx > ux) {
+            //|| cy > uy
+            if (pawns[cy + 1][cx - 1] != 0 && pawns[cy + 1][cx - 1] !== (player == 2 ? 1 : 2)) {
+                pawns[cy + 1][cx - 1] = 0;
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            } else {
+                pawns[cy][cx] = 0;
+                pawns[uy][ux] = player == 2 ? 1 : 2;
+            }
+
+            return pawns;
+        } else {
+            console.log("else");
+            pawns[cy][cx] = 0;
+            pawns[uy][ux] = player == 2 ? 1 : 2;
+            return pawns;
+        }
+    }
+}
+
+function clearBoard() {
+    let boardArr = board.map((y, j) => {
+        let yArr = y.map((x, i) => {
+            if (x == 3) {
+                return 0;
+            } else {
+                return x;
+            }
+        });
+        return yArr;
+    });
+    return boardArr;
+}
+
+function checkMoves(current, player) {
+    let cx = (current.y + 7) / 2;
+    let cy = (current.x + 7) / 2;
+
+    console.log(cy, cx);
+    board = clearBoard();
+
+    if (player == 1) {
+        //white
+        if (pawns[cy - 1][cx + 1] == 0) {
+            board[cy - 1][cx + 1] = 3;
+        } else if (pawns[cy - 2][cx + 2] == 0) {
+            board[cy - 2][cx + 2] = 3;
+        }
+
+        if (pawns[cy - 1][cx - 1] == 0) {
+            board[cy - 1][cx - 1] = 3;
+        } else if (pawns[cy - 2][cx - 2] == 0) {
+            board[cy - 2][cx - 2] = 3;
+        }
+    } else {
+        //black
+        if (pawns[cy + 1][cx - 1] == 0) {
+            board[cy + 1][cx - 1] = 3;
+        } else if (pawns[cy + 2][cx - 2] == 0) {
+            board[cy + 2][cx - 2] = 3;
+        }
+
+        if (pawns[cy + 1][cx + 1] == 0) {
+            board[cy + 1][cx + 1] = 3;
+        } else if (pawns[cy + 2][cx + 2] == 0) {
+            board[cy + 2][cx + 2] = 3;
+        }
+    }
+    return board;
+}
+
 socketio.on("connection", (client) => {
     sessions.push(client.id);
     if (sessions.length > 2) {
@@ -47,29 +175,9 @@ socketio.on("connection", (client) => {
         let { current, updated, player } = data;
 
         console.log({ current, updated, player });
-        pawns = pawns.map((arr, i) => {
-            if (i == (current.x + 7) / 2) {
-                let array = arr.map((el, j) => {
-                    if (j == (current.y + 7) / 2) {
-                        return 0;
-                    } else {
-                        return el;
-                    }
-                });
-                return array;
-            } else if (i == (updated.x + 7) / 2) {
-                let array = arr.map((el, j) => {
-                    if (j == (updated.y + 7) / 2) {
-                        return +player == 2 ? 1 : 2;
-                    } else {
-                        return el;
-                    }
-                });
-                return array;
-            } else {
-                return arr;
-            }
-        });
+        board = clearBoard();
+
+        pawns = kill({ current, updated, player });
 
         setobj = { board, pawns, player };
         client.emit("response", { board, pawns, player });
@@ -77,6 +185,13 @@ socketio.on("connection", (client) => {
         client.broadcast.emit("unblock", { board, pawns, player: +player == 2 ? 1 : 2 });
 
         // client.id - unikalna nazwa klienta generowana przez socket.io
+    });
+    client.on("checkMoves", (data) => {
+        let { current, player } = data;
+
+        board = checkMoves(current, player);
+        console.log(current);
+        client.emit("checkedMoves", { board, pawns, player, current });
     });
     if (setobj) {
         socketio.emit("load", setobj);

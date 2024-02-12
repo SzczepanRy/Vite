@@ -60,6 +60,19 @@ export const Net = {
             throw err;
         }
     },
+    checkMoves({ CX, CY }, player) {
+        client.emit("checkMoves", {
+            current: { x: CX, y: CY },
+            player,
+        });
+
+        client.on("checkedMoves", (data) => {
+            console.log(data.player + "responce");
+            GameObject.reset();
+            let highlingt = false;
+            GameObject.render(data.pawns, data.board, data.player, highlingt, data.current);
+        });
+    },
     reRenderBoard({ CX, CY }, { UX, UY }, player) {
         console.log({ CX, CY }, { UX, UY });
         console.log(player);
@@ -69,10 +82,10 @@ export const Net = {
             updated: { x: UX, y: UY },
             player,
         });
+
         client.on("response", (data) => {
             console.log(data.player + "responce");
             GameObject.reset();
-
             GameObject.render(data.pawns, data.board, data.player);
         });
         client.on("block", (data) => {
@@ -81,11 +94,27 @@ export const Net = {
             GameObject.render(data.pawns, data.board, data.player);
             document.querySelector(".waiting").showModal();
             console.log("YOU SHOULD BE BLOCKED");
-            setTimeout(() => {
-                console.log("LOST");
-            }, 10000);
+
+            // Clear any timeout/interval up to that id
+
+            // setTimeout(() => {
+            document.querySelector(".waiting").showModal();
+            let i = 30;
+
+            setInterval(() => {
+                if (i < 0) {
+                    window.location.reload();
+                }
+                document.querySelector(".timer").innerHTML = i;
+                i--;
+            }, 1000);
+            // }, 1000);
         });
         client.on("unblock", (data) => {
+            const interval_id = window.setInterval(function () {}, Number.MAX_SAFE_INTEGER);
+            for (let i = 1; i < interval_id; i++) {
+                window.clearInterval(i);
+            }
             console.log(data.player + "responce");
             GameObject.reset();
             GameObject.render(data.pawns, data.board, data.player);
