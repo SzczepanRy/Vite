@@ -67,7 +67,7 @@ export const Net = {
         });
 
         client.on("checkedMoves", (data) => {
-            console.log(data.player + "responce");
+            console.log(data.current + "responce");
             GameObject.reset();
             let highlingt = false;
             GameObject.render(data.pawns, data.board, data.player, highlingt, data.current);

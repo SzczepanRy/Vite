@@ -136,26 +136,26 @@ function checkMoves(current, player) {
         //white
         if (pawns[cy - 1][cx + 1] == 0) {
             board[cy - 1][cx + 1] = 3;
-        } else if (pawns[cy - 2][cx + 2] == 0) {
+        } else if (pawns[cy - 2][cx + 2] == 0 && pawns[cy - 1][cx + 1] != 1) {
             board[cy - 2][cx + 2] = 3;
         }
 
         if (pawns[cy - 1][cx - 1] == 0) {
             board[cy - 1][cx - 1] = 3;
-        } else if (pawns[cy - 2][cx - 2] == 0) {
+        } else if (pawns[cy - 2][cx - 2] == 0 && pawns[cy - 1][cx + 1] != 1) {
             board[cy - 2][cx - 2] = 3;
         }
     } else {
         //black
         if (pawns[cy + 1][cx - 1] == 0) {
             board[cy + 1][cx - 1] = 3;
-        } else if (pawns[cy + 2][cx - 2] == 0) {
+        } else if (pawns[cy + 2][cx - 2] == 0 && pawns[cy - 1][cx + 1] != 2) {
             board[cy + 2][cx - 2] = 3;
         }
 
         if (pawns[cy + 1][cx + 1] == 0) {
             board[cy + 1][cx + 1] = 3;
-        } else if (pawns[cy + 2][cx + 2] == 0) {
+        } else if (pawns[cy + 2][cx + 2] == 0 && pawns[cy - 1][cx + 1] != 2) {
             board[cy + 2][cx + 2] = 3;
         }
     }

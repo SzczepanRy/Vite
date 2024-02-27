@@ -93,29 +93,6 @@ export default class Renderer {
         }
     }
 
-    // checkMatrerial(player) {
-    //     if (player == 2) {
-    //         let texture = new TextureLoader().load(whiteWood);
-    //         texture.colorSpace = SRGBColorSpace;
-    //         this.material = new MeshBasicMaterial({
-    //             map: texture,
-    //             side: DoubleSide,
-    //             transparent: false,
-    //         });
-    //         return this.material;
-    //     } else if (player == 1) {
-    //         let texture = new TextureLoader().load(blackWood);
-    //         texture.colorSpace = SRGBColorSpace;
-    //         this.material = new MeshBasicMaterial({
-    //             map: texture,
-    //             side: DoubleSide,
-    //             transparent: false,
-    //         });
-
-    //         return this.material;
-    //     }
-    // }
-
     render(scene, camera, player, highlight, current) {
         setTimeout(() => {
             console.log("render");
@@ -145,10 +122,15 @@ export default class Renderer {
                 });
             }
 
-            if (this.click == 1 && this.clickedItem.geometry.type == "CylinderGeometry") {
+            if (
+                this.click == 1 &&
+                this.clickedItem.geometry.type == "CylinderGeometry" &&
+                this.clickedItem.material.name == (player == 1 ? 2 : 1)
+            ) {
                 console.log("hilight pawn");
+                console.log(player);
+                console.log(this.clickedItem.material.name);
 
-                console.log(this.clickedItem);
                 // this.lastClickedItem = this.clickedItem;
                 // this.lastClickedPawnMaterial = this.clickedItem.material;
 
@@ -183,13 +165,15 @@ export default class Renderer {
                     { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z },
                     player
                 );
+
+                
                 // this.lastClickedItem.position.x = this.clickedItem.position.x;
                 // this.lastClickedItem.position.z = this.clickedItem.position.z;
 
                 //    this.clickedItem.needsUpdate = true;
 
                 this.click = 0;
-            } else if (this.click > 3) {
+            } else if (this.click > 2) {
                 // this.lastClickedItem.material = this.checkMatrerial(player);
                 // this.lastClickedItem.material = this.lastClickedPawnMaterial;
                 console.log("");

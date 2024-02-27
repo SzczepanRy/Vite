@@ -30,6 +30,7 @@ export default class PawnsObject {
                         map: texture,
                         side: DoubleSide,
                         transparent: false,
+                        name: el,
                     });
                     let mesh = new Mesh(this.geo, this.material);
                     this.pawnsObject.add(mesh);
@@ -41,6 +42,7 @@ export default class PawnsObject {
                         map: texture,
                         side: DoubleSide,
                         transparent: false,
+                        name: el,
                     });
                     let mesh = new Mesh(this.geo, this.material);
                     this.pawnsObject.add(mesh);
