@@ -45,7 +45,8 @@ function kill({ current, updated, player }) {
         if (cx < ux) {
             //|| cy > uy
             console.log(cy, cx, uy, ux);
-            console.log(pawns[cy + 1][cx + 1]);
+            console.log(pawns);
+            // console.log(pawns[cy + 1][cx + 1]);
             if (pawns[cy - 1][cx + 1] != 0 && pawns[cy - 1][cx + 1] !== (player == 2 ? 1 : 2)) {
                 pawns[cy - 1][cx + 1] = 0;
                 pawns[cy][cx] = 0;
@@ -79,7 +80,7 @@ function kill({ current, updated, player }) {
         if (cx < ux) {
             //|| cy > uy
             console.log(cy, cx, uy, ux);
-            console.log(pawns[cy + 1][cx + 1]);
+
             if (pawns[cy + 1][cx + 1] != 0 && pawns[cy + 1][cx + 1] !== (player == 2 ? 1 : 2)) {
                 pawns[cy + 1][cx + 1] = 0;
                 pawns[cy][cx] = 0;
@@ -126,40 +127,45 @@ function clearBoard() {
 }
 
 function checkMoves(current, player) {
-    let cx = (current.y + 7) / 2;
-    let cy = (current.x + 7) / 2;
+    try {
+        let cx = (current.y + 7) / 2;
+        let cy = (current.x + 7) / 2;
 
-    console.log(cy, cx);
-    board = clearBoard();
+        console.log(cy, cx);
+        board = clearBoard();
 
-    if (player == 1) {
-        //white
-        if (pawns[cy - 1][cx + 1] == 0) {
-            board[cy - 1][cx + 1] = 3;
-        } else if (pawns[cy - 2][cx + 2] == 0 && pawns[cy - 1][cx + 1] != 1) {
-            board[cy - 2][cx + 2] = 3;
-        }
+        if (player == 1) {
+            //white
+            if (pawns[cy - 1][cx + 1] == 0) {
+                board[cy - 1][cx + 1] = 3;
+            } else if (pawns[cy - 2][cx + 2] == 0) {
+                board[cy - 2][cx + 2] = 3;
+            }
 
-        if (pawns[cy - 1][cx - 1] == 0) {
-            board[cy - 1][cx - 1] = 3;
-        } else if (pawns[cy - 2][cx - 2] == 0 && pawns[cy - 1][cx + 1] != 1) {
-            board[cy - 2][cx - 2] = 3;
-        }
-    } else {
-        //black
-        if (pawns[cy + 1][cx - 1] == 0) {
-            board[cy + 1][cx - 1] = 3;
-        } else if (pawns[cy + 2][cx - 2] == 0 && pawns[cy - 1][cx + 1] != 2) {
-            board[cy + 2][cx - 2] = 3;
-        }
+            if (pawns[cy - 1][cx - 1] == 0) {
+                board[cy - 1][cx - 1] = 3;
+            } else if (pawns[cy - 2][cx - 2] == 0) {
+                board[cy - 2][cx - 2] = 3;
+            }
+        } else {
+            //black
+            if (pawns[cy + 1][cx - 1] == 0) {
+                board[cy + 1][cx - 1] = 3;
+            } else if (pawns[cy + 2][cx - 2] == 0) {
+                board[cy + 2][cx - 2] = 3;
+            }
 
-        if (pawns[cy + 1][cx + 1] == 0) {
-            board[cy + 1][cx + 1] = 3;
-        } else if (pawns[cy + 2][cx + 2] == 0 && pawns[cy - 1][cx + 1] != 2) {
-            board[cy + 2][cx + 2] = 3;
+            if (pawns[cy + 1][cx + 1] == 0) {
+                board[cy + 1][cx + 1] = 3;
+            } else if (pawns[cy + 2][cx + 2] == 0) {
+                board[cy + 2][cx + 2] = 3;
+            }
         }
+        return board;
+    } catch (err) {
+        console.log(err);
+        return board;
     }
-    return board;
 }
 
 socketio.on("connection", (client) => {
