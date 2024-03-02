@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    overflow: hidden;
 }
 
 nav {
@@ -27,17 +28,21 @@ nav {
     padding: 50px;
     padding-top: 100px;
     gap: 20px;
-
 }
 
 .waiting {
     position: absolute;
-    height: 200px;
-    width: 400px;
-    left: calc(50vw - 100px);
-    top: calc(50vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 20px;
 }
 
-.loginDialog>* {
+.loginDialog > * {
     height: 30px;
 }

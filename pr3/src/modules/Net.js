@@ -3,6 +3,7 @@ import Ico from "./Ico";
 import { GameObject } from "./Main";
 import { io } from "https://cdn.socket.io/4.6.0/socket.io.esm.min.js";
 import Renderer from "./Renderer";
+
 const nav = document.querySelector("nav");
 const dialog = document.querySelector(".loginDialog");
 const client = io("ws://localhost:3000");
@@ -31,6 +32,7 @@ export const Net = {
                 dialog.style.zIndex = -10;
                 //if (data.player == 1) {
                 console.log("Playerr " + data.player);
+
                 GameObject.render(data.pawns, data.board, data.player);
                 // }
 

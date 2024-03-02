@@ -22,7 +22,7 @@ export default class Renderer {
         this.clickedItem;
         this.lastClickedItem;
         this.lastClickedPawnMaterial;
-
+        this.tweenPath = null;
         this.event = 0;
     }
 
@@ -159,14 +159,15 @@ export default class Renderer {
                 console.log(player);
                 console.log("AAAAAAAAAAAAAAAA");
                 console.log(this.clickedItem);
-                // this.lastClickedItem.material = this.checkMatrerial(player);
+
                 Net.reRenderBoard(
                     { CX: this.lastClickedItem.position.x, CY: this.lastClickedItem.position.z },
                     { UX: this.clickedItem.position.x, UY: this.clickedItem.position.z },
                     player
                 );
 
-                
+                // this.lastClickedItem.material = this.checkMatrerial(player);
+
                 // this.lastClickedItem.position.x = this.clickedItem.position.x;
                 // this.lastClickedItem.position.z = this.clickedItem.position.z;
 
